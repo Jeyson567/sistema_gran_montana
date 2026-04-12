@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pedido - Gran Montana POS</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="encabezado">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span id="usuarioNombre">Bienvenido</span>
+    <button id="btnLogout" style="padding:8px 12px;border:none;border-radius:8px;background:#b33232;color:white;cursor:pointer;">
+      Cerrar sesión
+    </button>
+  </div>
+
+  <h1 id="tituloMesa">Pedido</h1>
+  <a class="boton-pequeno" href="mesas.html">Volver</a>
+</header>
+
+<main class="contenido-pedido">
+  <section>
+    <div class="barra-pedido">
+      <h2>Agregar producto</h2>
+      <div id="estadoPedido" class="estado-pill">Estado: Editando</div>
+    </div>
+
+    <div class="producto-manual-box">
+      <h3>Producto</h3>
+
+      <div class="producto-manual-grid">
+        <input type="text" id="manualNombre" placeholder="Nombre del producto">
+        <input type="number" id="manualPrecio" placeholder="Precio" min="0" step="0.01">
+        <input type="text" id="manualComentario" placeholder="Comentario opcional">
+        <button id="btnAgregarManual" class="boton-accion enviar">Agregar al pedido</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="detalle-pedido">
+    <h2>Detalle del pedido</h2>
+    <ul id="listaPedido"></ul>
+    <h3 id="totalPedido">Total: Q0</h3>
+
+    <div class="acciones-pedido">
+      <button id="btnEnviarCocina" class="boton-accion enviar">Enviar a cocina</button>
+      <button id="btnReabrirPedido" class="boton-accion reabrir">Reabrir pedido</button>
+      <button id="btnCobrar" class="boton-accion cobrar">Cobrar</button>
+      <button id="btnLimpiar" class="boton-accion limpiar">Limpiar pedido</button>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="js/auth-guard.js"></script>
+<script type="module" src="js/user-ui.js"></script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>

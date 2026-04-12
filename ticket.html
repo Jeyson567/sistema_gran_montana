@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket - Gran Montana POS</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="ticket-body">
+
+<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;">
+  <span id="usuarioNombre">Bienvenido</span>
+  <button id="btnLogout" style="padding:8px 12px;border:none;border-radius:8px;background:#b33232;color:white;cursor:pointer;">
+    Cerrar sesión
+  </button>
+</div>
+
+<main class="ticket-80mm" id="ticketPrintable">
+  <div class="ticket-header">
+    <h1>GRAN MONTANA</h1>
+    <p>Hotel y Restaurante</p>
+    <p id="ticketNumero">Ticket #</p>
+    <p id="ticketFecha">Fecha:</p>
+    <p id="ticketMesa">Mesa:</p>
+    <p id="ticketMetodo">Pago:</p>
+  </div>
+
+  <div class="ticket-divider"></div>
+  <div id="ticketItems" class="ticket-items"></div>
+  <div class="ticket-divider"></div>
+
+  <div class="ticket-total">
+    <div class="ticket-row total">
+      <span>TOTAL</span>
+      <span id="ticketTotal">Q0</span>
+    </div>
+  </div>
+
+  <div class="ticket-divider"></div>
+
+  <div class="ticket-footer">
+    <p>Gracias por su visita</p>
+  </div>
+</main>
+
+<div class="ticket-acciones">
+  <button onclick="window.print()" class="btn-confirmar">🖨️ Imprimir ticket</button>
+  <a href="mesas.html" class="boton-pequeno">Volver a mesas</a>
+</div>
+
+<script type="module" src="js/auth-guard.js"></script>
+<script type="module" src="js/user-ui.js"></script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>

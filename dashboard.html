@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Gran Montana POS</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="encabezado">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span id="usuarioNombre">Bienvenido</span>
+    <button id="btnLogout" style="padding:8px 12px;border:none;border-radius:8px;background:#b33232;color:white;cursor:pointer;">
+      Cerrar sesión
+    </button>
+  </div>
+
+  <h1>📊 Dashboard</h1>
+  <a class="boton-pequeno" href="index.html">Inicio</a>
+</header>
+
+<main class="dashboard-contenido">
+  <section class="dashboard-resumen">
+    <div class="dashboard-card">
+      <h3>Total vendido hoy</h3>
+      <p id="dashboardTotalHoy">Q0</p>
+    </div>
+
+    <div class="dashboard-card">
+      <h3>Cantidad de ventas</h3>
+      <p id="dashboardCantidadVentas">0</p>
+    </div>
+  </section>
+
+  <section class="dashboard-lista-section">
+    <h2>Ventas registradas</h2>
+    <div id="dashboardListaVentas" class="dashboard-lista"></div>
+  </section>
+</main>
+
+<script type="module" src="js/auth-guard.js"></script>
+<script type="module" src="js/user-ui.js"></script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>

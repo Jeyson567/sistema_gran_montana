@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cocina - Gran Montana POS</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="encabezado">
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span id="usuarioNombre">Bienvenido</span>
+    <button id="btnLogout" style="padding:8px 12px;border:none;border-radius:8px;background:#b33232;color:white;cursor:pointer;">
+      Cerrar sesión
+    </button>
+  </div>
+
+  <h1>👨‍🍳 Cocina</h1>
+  <a class="boton-pequeno" href="index.html">Inicio</a>
+</header>
+
+<main class="cocina-contenido">
+  <section class="seccion-cocina">
+    <div class="titulo-seccion-cocina">
+      <h2>🔴 En cocina</h2>
+      <span class="badge-cocina">Pendientes</span>
+    </div>
+    <div id="cocinaActiva" class="grid-cocina"></div>
+  </section>
+
+  <section class="seccion-cocina">
+    <div class="titulo-seccion-cocina">
+      <h2>🟢 Listos</h2>
+      <span class="badge-cocina listo">Preparados</span>
+    </div>
+    <div id="cocinaLista" class="grid-cocina"></div>
+  </section>
+</main>
+
+<script type="module" src="js/auth-guard.js"></script>
+<script type="module" src="js/user-ui.js"></script>
+<script type="module" src="js/app.js"></script>
+
+</body>
+</html>
