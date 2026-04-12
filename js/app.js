@@ -90,10 +90,9 @@ function textoEstado(v) {
 
 function mesaClase(data) {
   const pedidoMesa = Array.isArray(data?.pedido) ? data.pedido : [];
-  const totalMesa = Number(data?.total || 0);
   const estadoMesa = data?.estado || "libre";
 
-  if (pedidoMesa.length === 0 || totalMesa <= 0) return "libre";
+  if (pedidoMesa.length === 0) return "libre";
   if (estadoMesa === "listo") return "lista";
   if (estadoMesa === "enviado") return "enviada";
   return "ocupada";
@@ -105,6 +104,10 @@ function esEditable() {
 
 function formatearQ(n) {
   return `Q${Number(n || 0)}`;
+}
+
+function formatearPrecioVisual(n) {
+  return Number(n || 0) === 0 ? "Incluido" : formatearQ(n);
 }
 
 function setBotonesMetodoVisual() {
@@ -245,7 +248,7 @@ function renderizarMesasConDatos(datosMesas) {
   if (!mesas.length) return;
 
   mesas.forEach((mesa) => {
-    const nombreMesa = mesa.querySelector(".mesa-nombre").textContent.trim();
+    const nombreMesa = mesa.querySelector(".mesa-nombre")?.textContent?.trim();
     const totalMesa = mesa.querySelector(".mesa-total");
     const estadoMesa = mesa.querySelector(".mesa-estado");
 
@@ -259,10 +262,15 @@ function renderizarMesasConDatos(datosMesas) {
     mesa.classList.remove("libre", "ocupada", "enviada", "lista");
     mesa.classList.add(mesaClase(datos));
 
-    totalMesa.textContent = `Total: ${formatearQ(datos.total)}`;
-    estadoMesa.textContent = `Estado: ${textoEstado(
-      (Array.isArray(datos.pedido) && datos.pedido.length > 0) ? datos.estado : "libre"
-    )}`;
+    if (totalMesa) {
+      totalMesa.textContent = `Total: ${formatearQ(datos.total)}`;
+    }
+
+    if (estadoMesa) {
+      estadoMesa.textContent = `Estado: ${textoEstado(
+        Array.isArray(datos.pedido) && datos.pedido.length > 0 ? datos.estado : "libre"
+      )}`;
+    }
 
     mesa.onclick = () => {
       window.location.href = `pedido.html?mesa=${encodeURIComponent(nombreMesa)}`;
@@ -326,7 +334,7 @@ function renderizarPedidoHTML() {
 
     const nombre = document.createElement("div");
     nombre.style.fontWeight = "bold";
-    nombre.textContent = `${item.nombre} — ${formatearQ(item.precio)}`;
+    nombre.textContent = `${item.nombre} — ${formatearPrecioVisual(item.precio)}`;
     li.appendChild(nombre);
 
     if (item.comentario) {
@@ -430,7 +438,7 @@ function crearCardCocina(datos, tipo) {
 
     const precio = document.createElement("div");
     precio.className = "item-cocina-precio";
-    precio.textContent = formatearQ(item.precio);
+    precio.textContent = formatearPrecioVisual(item.precio);
 
     itemBox.appendChild(nombre);
     itemBox.appendChild(precio);
@@ -571,7 +579,7 @@ async function renderizarTicket() {
     nombre.textContent = item.nombre;
 
     const precio = document.createElement("span");
-    precio.textContent = formatearQ(item.precio);
+    precio.textContent = formatearPrecioVisual(item.precio);
 
     row.appendChild(nombre);
     row.appendChild(precio);
@@ -608,11 +616,14 @@ function escucharDashboard() {
     dashboardListaVentas.innerHTML = "";
 
     if (ventasHoy.length === 0) {
-      dashboardListaVentas.innerHTML = '<div class="dashboard-vacio">No hay ventas registradas hoy.</div>';
+      dashboardListaVentas.innerHTML =
+        '<div class="dashboard-vacio">No hay ventas registradas hoy.</div>';
       return;
     }
 
-    const ordenadas = [...ventasHoy].sort((a, b) => Number(b.numeroTicket || 0) - Number(a.numeroTicket || 0));
+    const ordenadas = [...ventasHoy].sort(
+      (a, b) => Number(b.numeroTicket || 0) - Number(a.numeroTicket || 0)
+    );
 
     ordenadas.forEach((venta) => {
       const card = document.createElement("div");
@@ -679,7 +690,8 @@ if (btnAgregarManual) {
     }
 
     const nombre = (manualNombre?.value || "").trim();
-    const precio = Number(manualPrecio?.value || 0);
+    const precioTexto = (manualPrecio?.value || "").trim();
+    const precio = Number(precioTexto);
     const comentario = (manualComentario?.value || "").trim();
 
     if (!nombre) {
@@ -687,7 +699,7 @@ if (btnAgregarManual) {
       return;
     }
 
-    if (precio <= 0) {
+    if (precioTexto === "" || Number.isNaN(precio) || precio < 0) {
       alert("Ingresa un precio válido.");
       return;
     }
