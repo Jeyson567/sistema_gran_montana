@@ -28,8 +28,24 @@
       <div id="estadoPedido" class="estado-pill">Estado: Editando</div>
     </div>
 
+    <!-- MENÚ -->
+    <div class="producto-manual-box" style="margin-bottom:20px;">
+      <h3>Menú</h3>
+
+      <div style="margin-bottom:20px;">
+        <h4 style="margin-bottom:10px;color:#d4a017;">🍽️ Comida</h4>
+        <div id="menuComida" class="productos-container"></div>
+      </div>
+
+      <div>
+        <h4 style="margin-bottom:10px;color:#d4a017;">🥤 Bebidas</h4>
+        <div id="menuBebidas" class="productos-container"></div>
+      </div>
+    </div>
+
+    <!-- MANUAL -->
     <div class="producto-manual-box">
-      <h3>Producto</h3>
+      <h3>Producto manual</h3>
 
       <div class="producto-manual-grid">
         <input type="text" id="manualNombre" placeholder="Nombre del producto">
@@ -37,6 +53,10 @@
         <input type="text" id="manualComentario" placeholder="Comentario opcional">
         <button id="btnAgregarManual" class="boton-accion enviar">Agregar al pedido</button>
       </div>
+
+      <p style="margin-top:10px;opacity:.8;font-size:14px;">
+        Puedes poner <strong>0</strong> si la bebida o producto va incluido.
+      </p>
     </div>
   </section>
 

@@ -7,7 +7,9 @@ import {
   addDoc,
   onSnapshot,
   serverTimestamp,
-  runTransaction
+  runTransaction,
+  query,
+  where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // =========================
@@ -41,6 +43,10 @@ const ticketTotal = document.getElementById("ticketTotal");
 const dashboardTotalHoy = document.getElementById("dashboardTotalHoy");
 const dashboardCantidadVentas = document.getElementById("dashboardCantidadVentas");
 const dashboardListaVentas = document.getElementById("dashboardListaVentas");
+
+// menú pedido
+const menuComida = document.getElementById("menuComida");
+const menuBebidas = document.getElementById("menuBebidas");
 
 // producto manual
 const manualNombre = document.getElementById("manualNombre");
@@ -120,7 +126,8 @@ function normalizarItem(item = {}, estadoMesa = "libre") {
     nombre: item.nombre || "",
     precio: Number(item.precio || 0),
     comentario: item.comentario || "",
-    estadoItem
+    estadoItem,
+    area: item.area || "comida"
   };
 }
 
@@ -293,6 +300,83 @@ async function generarVenta(mesaNombre) {
   await limpiarMesaTotal(mesaNombre);
 
   return ventaRef.id;
+}
+
+// =========================
+// RENDER MENÚ EN PEDIDO
+// =========================
+function crearBotonMenu(producto) {
+  const btn = document.createElement("button");
+  btn.className = "producto";
+  btn.type = "button";
+  btn.innerHTML = `
+    <div>${producto.nombre}</div>
+    <div style="font-size:14px;margin-top:6px;opacity:.9;">${formatearPrecioVisual(producto.precio)}</div>
+  `;
+
+  btn.addEventListener("click", async () => {
+    const mesaNombre = getMesaFromURL();
+    if (!mesaNombre) return;
+
+    pedido.push({
+      nombre: producto.nombre || "",
+      precio: Number(producto.precio || 0),
+      comentario: "",
+      estadoItem: "pendiente",
+      area: producto.area || "comida"
+    });
+
+    pedido = normalizarPedido(pedido, estado);
+    estado = calcularEstadoMesa(pedido);
+
+    await guardarMesa(mesaNombre);
+  });
+
+  return btn;
+}
+
+function escucharMenuPedido() {
+  if (!menuComida || !menuBebidas) return;
+
+  const q = query(collection(db, "menu"), where("activo", "==", true));
+
+  onSnapshot(q, (snapshot) => {
+    menuComida.innerHTML = "";
+    menuBebidas.innerHTML = "";
+
+    const productos = [];
+    snapshot.forEach((docSnap) => {
+      productos.push({
+        id: docSnap.id,
+        ...docSnap.data()
+      });
+    });
+
+    productos.sort((a, b) => {
+      const nombreA = (a.nombre || "").toLowerCase();
+      const nombreB = (b.nombre || "").toLowerCase();
+      return nombreA.localeCompare(nombreB, "es");
+    });
+
+    const comida = productos.filter((p) => (p.area || "comida") === "comida");
+    const bebidas = productos.filter((p) => (p.area || "comida") === "bebidas");
+
+    if (comida.length === 0) {
+      menuComida.innerHTML = '<div style="opacity:.8;">No hay productos de comida.</div>';
+    } else {
+      comida.forEach((producto) => {
+        menuComida.appendChild(crearBotonMenu(producto));
+      });
+    }
+
+    if (bebidas.length === 0) {
+      menuBebidas.innerHTML = '<div style="opacity:.8;">No hay bebidas.</div>';
+    } else {
+      bebidas.forEach((producto) => {
+        menuBebidas.appendChild(crearBotonMenu(producto));
+      });
+    }
+  });
 }
 
 // =========================
@@ -842,7 +926,8 @@ if (btnAgregarManual) {
       nombre,
       precio,
       comentario,
-      estadoItem: "pendiente"
+      estadoItem: "pendiente",
+      area: "comida"
     });
 
     pedido = normalizarPedido(pedido, estado);
@@ -969,6 +1054,10 @@ if (btnConfirmarPago) {
 
   if (tituloMesa) {
     await escucharMesaActual();
+  }
+
+  if (menuComida && menuBebidas) {
+    escucharMenuPedido();
   }
 
   if (cocinaActiva && cocinaLista) {
