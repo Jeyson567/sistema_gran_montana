@@ -47,6 +47,7 @@ const dashboardListaVentas = document.getElementById("dashboardListaVentas");
 // menú pedido
 const menuComida = document.getElementById("menuComida");
 const menuBebidas = document.getElementById("menuBebidas");
+const buscadorMenu = document.getElementById("buscadorMenu");
 
 // producto manual
 const manualNombre = document.getElementById("manualNombre");
@@ -318,10 +319,13 @@ function crearBotonMenu(producto) {
     const mesaNombre = getMesaFromURL();
     if (!mesaNombre) return;
 
+    const comentarioIngresado = prompt(`Comentario para ${producto.nombre} (opcional):`);
+    if (comentarioIngresado === null) return;
+
     pedido.push({
       nombre: producto.nombre || "",
       precio: Number(producto.precio || 0),
-      comentario: "",
+      comentario: comentarioIngresado.trim(),
       estadoItem: "pendiente",
       area: producto.area || "comida"
     });
@@ -341,9 +345,6 @@ function escucharMenuPedido() {
   const q = query(collection(db, "menu"), where("activo", "==", true));
 
   onSnapshot(q, (snapshot) => {
-    menuComida.innerHTML = "";
-    menuBebidas.innerHTML = "";
-
     const productos = [];
     snapshot.forEach((docSnap) => {
       productos.push({
@@ -358,23 +359,41 @@ function escucharMenuPedido() {
       return nombreA.localeCompare(nombreB, "es");
     });
 
-    const comida = productos.filter((p) => (p.area || "comida") === "comida");
-    const bebidas = productos.filter((p) => (p.area || "comida") === "bebidas");
+    function renderizarProductos() {
+      menuComida.innerHTML = "";
+      menuBebidas.innerHTML = "";
 
-    if (comida.length === 0) {
-      menuComida.innerHTML = '<div style="opacity:.8;">No hay productos de comida.</div>';
-    } else {
-      comida.forEach((producto) => {
-        menuComida.appendChild(crearBotonMenu(producto));
+      const textoBusqueda = (buscadorMenu?.value || "").trim().toLowerCase();
+
+      const productosFiltrados = productos.filter((p) => {
+        const nombre = (p.nombre || "").toLowerCase();
+        return nombre.includes(textoBusqueda);
       });
+
+      const comida = productosFiltrados.filter((p) => (p.area || "comida") === "comida");
+      const bebidas = productosFiltrados.filter((p) => (p.area || "comida") === "bebidas");
+
+      if (comida.length === 0) {
+        menuComida.innerHTML = '<div style="opacity:.8;">No hay productos de comida.</div>';
+      } else {
+        comida.forEach((producto) => {
+          menuComida.appendChild(crearBotonMenu(producto));
+        });
+      }
+
+      if (bebidas.length === 0) {
+        menuBebidas.innerHTML = '<div style="opacity:.8;">No hay bebidas.</div>';
+      } else {
+        bebidas.forEach((producto) => {
+          menuBebidas.appendChild(crearBotonMenu(producto));
+        });
+      }
     }
 
-    if (bebidas.length === 0) {
-      menuBebidas.innerHTML = '<div style="opacity:.8;">No hay bebidas.</div>';
-    } else {
-      bebidas.forEach((producto) => {
-        menuBebidas.appendChild(crearBotonMenu(producto));
-      });
+    renderizarProductos();
+
+    if (buscadorMenu) {
+      buscadorMenu.oninput = renderizarProductos;
     }
   });
 }
