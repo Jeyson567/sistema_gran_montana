@@ -32,7 +32,16 @@ function paginaActual() {
 
 function rolPermitido(rol, pagina) {
   const permisos = {
-    admin: ["index.html", "mesas.html", "pedido.html", "cocina.html", "caja.html", "ticket.html", "dashboard.html"],
+    admin: [
+      "index.html",
+      "mesas.html",
+      "pedido.html",
+      "cocina.html",
+      "caja.html",
+      "ticket.html",
+      "dashboard.html",
+      "menu-admin.html"
+    ],
     mesero: ["index.html", "mesas.html", "pedido.html", "ticket.html"],
     cocina: ["index.html", "cocina.html"],
     caja: ["index.html", "mesas.html", "pedido.html", "caja.html", "ticket.html"]

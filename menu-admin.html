@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Admin - Gran Montana POS</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="encabezado">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+    <span id="usuarioNombre">Bienvenido</span>
+    <button id="btnLogout" style="padding:8px 12px;border:none;border-radius:8px;background:#b33232;color:white;cursor:pointer;">
+      Cerrar sesión
+    </button>
+  </div>
+
+  <h1>📋 Administrar menú</h1>
+  <a class="boton-pequeno" href="index.html">Inicio</a>
+</header>
+
+<main style="padding:20px;max-width:1000px;margin:0 auto;">
+  <section style="background:#1c1c1c;padding:20px;border-radius:14px;margin-bottom:20px;">
+    <h2>Agregar producto</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+      <input type="text" id="menuNombre" placeholder="Nombre del producto">
+      <input type="number" id="menuPrecio" placeholder="Precio" min="0" step="0.01">
+
+      <select id="menuArea">
+        <option value="comida">Comida</option>
+        <option value="bebidas">Bebidas</option>
+      </select>
+
+      <select id="menuActivo">
+        <option value="true">Activo</option>
+        <option value="false">Inactivo</option>
+      </select>
+    </div>
+
+    <div style="margin-top:14px;">
+      <button id="btnGuardarProducto" class="btn-confirmar" style="max-width:280px;">
+        Guardar producto
+      </button>
+    </div>
+  </section>
+
+  <section style="background:#1c1c1c;padding:20px;border-radius:14px;">
+    <h2>Productos del menú</h2>
+    <div id="menuLista"></div>
+  </section>
+</main>
+
+<script type="module" src="js/auth-guard.js"></script>
+<script type="module" src="js/user-ui.js"></script>
+<script type="module" src="js/menu-admin.js"></script>
+
+</body>
+</html>
